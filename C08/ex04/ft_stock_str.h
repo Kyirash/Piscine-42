@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_stock_str.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abesneux <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/23 13:54:40 by abesneux          #+#    #+#             */
-/*   Updated: 2023/08/23 13:55:17 by abesneux         ###   ########.fr       */
+/*   Created: 2023/08/23 14:28:04 by abesneux          #+#    #+#             */
+/*   Updated: 2023/08/23 14:29:16 by abesneux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#ifndef FT_STOCK_STR_H
+# define FT_STOCK_STR_H
 
-#include "ft_point.h"
-void set_point(t_point *point)
+typedef struct s_stock_str
 {
-	point->x = 42;
-	point->y = 21;
-}
-int main(void)
-{
-	t_point point;
-	set_point(&point);
-	return (0);
-}
+	int size;
+	char *str;
+	char *copy;
+}		t_stock_str;
+#endif
