@@ -1,2 +1,2 @@
-#!/bin/sh
-ifconfig | grep -o '\([0-9a-f]\{2\}:\)\{5\}[0-9a-f]\{2\}'
+#!/bin/bash
+ifconfig | grep -o -E '([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}'
