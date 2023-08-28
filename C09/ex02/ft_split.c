@@ -5,116 +5,124 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: abesneux <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/27 18:23:28 by abesneux          #+#    #+#             */
-/*   Updated: 2023/08/28 02:26:54 by abesneux         ###   ########.fr       */
+/*   Created: 2023/08/28 20:55:13 by abesneux          #+#    #+#             */
+/*   Updated: 2023/08/28 21:56:34 by abesneux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 
-int	ft_strlen(char *str)
+int	is_a_sep(char c, char *sep)
+{
+	while (*sep)
+	{
+		if (*sep == c)
+			return (1);
+		sep++;
+	}
+	return (0);
+}
+
+int	ft_strlen_to_sep(char *str, char *sep)
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (str[i] && is_a_sep(str[i], sep) == 0)
 		i++;
 	return (i);
 }
 
-int	check_sep(char c, char *sep_list)
+int	countwords(char *str, char *sep)
 {
-	int	i;
+	int	count;
 
-	i = 0;
-	while (sep_list[i])
+	count = 0;
+	while (*str)
 	{
-		if (c == sep_list[i])
-			return (1);
-		i++;
+		if (is_a_sep(*str, sep) == 0 && (is_a_sep(*(str + 1), sep) == 1
+				|| *(str + 1) == '\0'))
+			count ++;
+		str++;
 	}
-	return (0);
+	return (count);
 }
 
-char	*get_next_word(int *index, char *str, char *charset)
+char	*ft_word(char *str, char *charset)
 {
+	char	*tab;
+	int		wlen;
 	int		i;
-	char	*res;
-	int		len;
 
+	wlen = ft_strlen_to_sep(str, charset);
+	tab = (char *)malloc(sizeof(char) * (wlen + 1));
 	i = 0;
-	while (check_sep(str[*index], charset))
-		(*index)++;
-	while (!check_sep(str[*index + len], charset) && str[*index + len])
-		len++;
-	res = malloc ((len + 1) * sizeof(char));
-	if (!res)
-		return (NULL);
-	while (i < len)
+	while (i < wlen)
 	{
-		res[i] = str[*index];
-		(*index)++;
+		tab[i] = str[i];
 		i++;
 	}
-	res[i] = '\0';
-	return (res);
+	tab[i] = '\0';
+	return (tab);
 }
 
 char	**ft_split(char *str, char *charset)
 {
-	char	**res;
-	int		len_total;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	len_total = ft_strlen(str) + ft_strlen(charset) + 1;
-	res = malloc(len_total * sizeof(char *));
-	if (!res)
-		return (NULL);
-	while (i < len_total - 1)
-	{
-		res[i] = get_next_word(&j, str, charset);
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
-}
-/*
-int	main(void)
-{
-	char	*charset = "-/?";
-	char	*str = "Salut?Je-Suis/Adrien";
-	int	i;
-	int	j;
 	char	**tab;
+	int		i;
 
-	tab = ft_split(str, charset);
 	i = 0;
-	while (tab[i])
+	tab = (char **)malloc(sizeof(char *) *(countwords(str, charset) + 1));
+	if (tab == 0)
+		return (NULL);
+	while (*str)
 	{
-		j = 0;
-		while (tab[i][j])
+		while (*str != '\0' && is_a_sep(*str, charset))
+			str++;
+		if (*str != '\0')
 		{
-			printf("%s\n", &tab[i][j]);
-			j++;
+			tab[i] = ft_word(str, charset);
+			i++;
 		}
-		i++;
+		while (*str != '\0' && !is_a_sep(*str, charset))
+			str++;
 	}
-	return (0);
-}*/
-int	main(int argc, char **argv)
+	tab[i] = 0;
+	return (tab);
+}
+
+#include <stdio.h>
+
+int main()
 {
-	int		index;
-	char	**split;
-	(void)	argc;
-	split = ft_split(argv[1], argv[2]);
-	index = 0;
-	while (split[index])
-	{
-		printf("%s\n", split[index]);
-		index++;
-	}
+    char str[] = "Hello,World;This|is: a!test";
+    char sep[] = ",;|:!";
+
+    char **result = ft_split(str, sep);
+
+    if (result)
+    {
+        int i = 0;
+        while (result[i] != NULL)
+        {
+            printf("Word %d: %s\n", i, result[i]);
+            i++;
+        }
+
+        // Free allocated memory for the array of words
+        i = 0;
+        while (result[i] != NULL)
+        {
+            free(result[i]);
+            i++;
+        }
+        free(result);
+    }
+    else
+    {
+        printf("Memory allocation failed.\n");
+    }
+
+    return 0;
 }
