@@ -3,7 +3,7 @@ Piscine de l'ecole 42 | Aout 2023
 
 **LA QUASI-TOTALITE DES MAINS SONT EN COMMENTAIRES**   
 
-Pour installer un compilateur C sur windows, suivre ce lien : 
+Pour installer un compilateur C sur windows : 
 
 -> https://code.visualstudio.com/docs/languages/cpp#_install-a-compiler
 
